@@ -33,7 +33,7 @@ app.use(cookieParser()); // Parse cookies
 app.use('/auth', UserRouter); // Use UserRouter for /auth paths
 
 // Test route
-app.get('/vipin', (req, res) => {
+app.get('/', (req, res) => {
     res.send('Hello Vipin Don');
 });
 
