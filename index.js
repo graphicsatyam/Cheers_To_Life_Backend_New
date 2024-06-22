@@ -17,34 +17,8 @@ const app = express();
 app.use(express.json());
 
 // CORS Configuration
-// const corsOptions = {
-//     origin: '*', // Allow requests only from this specific origin
-//     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Specify allowed methods
-//     credentials: true, // Allow credentials (cookies, etc.)
-//     allowedHeaders: ['Content-Type', 'Authorization'], // Specify allowed headers
-//     preflightContinue: false, // Let the server handle preflight requests
-//     optionsSuccessStatus: 204 // Respond with 204 for successful OPTIONS requests
-// };
-
-// const corsOptions = {
-//     origin: '*', // Allow requests only from this specific origin
-//     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Specify allowed methods
-//     credentials: true, // Allow credentials (cookies, etc.)
-//     allowedHeaders: ['Content-Type', 'Authorization'], // Specify allowed headers
-//     preflightContinue: false, // Let the server handle preflight requests
-//     optionsSuccessStatus: 204 // Respond with 204 for successful OPTIONS requests
-// };
-// app.use(cors(corsOptions)); // Apply CORS middleware
-// app.use(cookieParser()); // Parse cookies
 const corsOptions = {
-    origin: function (origin, callback) {
-        // Allow requests from any origin
-        if (origin || !origin) {
-            callback(null, true); // Allow the request
-        } else {
-            callback(new Error('Not allowed by CORS')); // Block the request
-        }
-    },
+    origin: 'https://tramt-frontend.vercel.app', // Allow requests only from this specific origin
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Specify allowed methods
     credentials: true, // Allow credentials (cookies, etc.)
     allowedHeaders: ['Content-Type', 'Authorization'], // Specify allowed headers
@@ -52,7 +26,8 @@ const corsOptions = {
     optionsSuccessStatus: 204 // Respond with 204 for successful OPTIONS requests
 };
 
-
+app.use(cors(corsOptions)); // Apply CORS middleware
+app.use(cookieParser()); // Parse cookies
 
 // Routes
 app.use('/auth', UserRouter); // Use UserRouter for /auth paths
