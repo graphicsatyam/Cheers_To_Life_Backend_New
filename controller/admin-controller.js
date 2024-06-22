@@ -68,3 +68,19 @@ export const deleteEvent = async (req, res, next) => {
         res.status(500).json({ message: 'Internal server error', error });
     }
 };
+
+// For Updating the Users 
+export const updateUsers = async (req, res, next) => {
+    try {
+        console.log(req.body);
+        const UsersId = req.params.id;
+        const updatedUsers = await Events.findByIdAndUpdate(usersId, req.body, { new: true });
+        if (!updatedUsers) {
+            return res.status(404).json({ message: 'Event not found' });
+        }
+        res.status(200).json({ message: 'Users updated successfully', event: updatedUsers });
+    } catch (error) {
+        console.error('Error updating users:', error);
+        res.status(500).json({ message: 'Internal server error', error });
+    }
+};
