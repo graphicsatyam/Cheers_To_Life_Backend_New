@@ -1,5 +1,6 @@
 import { User } from '../models/UserSchema.js';
 import { Events } from '../models/EventsSchema.js';
+import router from '../routes/admin-router.js';
 
 export const getAllUsers = async (req, res, next) => {
     try {
@@ -41,6 +42,7 @@ export const addEvents = async (req, res, next) => {
 
 export const updateEvent = async (req, res, next) => {
     try {
+        console.log(req.body);
         const eventId = req.params.id;
         const updatedEvent = await Events.findByIdAndUpdate(eventId, req.body, { new: true });
         if (!updatedEvent) {

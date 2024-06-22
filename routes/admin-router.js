@@ -17,6 +17,8 @@ router.route('/events/:id')
     .put(updateEvent)
     .delete(deleteEvent);
 
+router.get('/', (req, res)=> {console.log('vipin')});
+
 // Example protected route (uncomment authMiddleware if using authentication)
 // router.get('/protected-route', authMiddleware, (req, res) => {
 //     res.send("This is a protected route.");
