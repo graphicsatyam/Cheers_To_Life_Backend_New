@@ -1,11 +1,10 @@
-// Importing necessary modules
 import express from "express";
 import dotenv from 'dotenv';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import adminRoutes from './routes/admin-router.js';
-import { UserRouter } from "./routes/user.js";
-import connectDB from './db.js';  // Import the connectDB function
+import { UserRouter } from "./middlewares/user.js";
+import connectDB from './db.js';
 
 // Load environment variables from .env file
 dotenv.config();
@@ -13,53 +12,42 @@ dotenv.config();
 // Create an instance of the express application
 const app = express();
 
+// CORS configuration
+const corsOptions = {
+    origin: 'http://localhost:3000', // Change this to your frontend URL
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true
+};
+
+app.use(cors(corsOptions));
+
 // Middleware to parse JSON bodies
 app.use(express.json());
 
-// CORS Configuration
-// const corsOptions = {
-//     origin: 'https://tramt-frontend.vercel.app', // Allow requests only from this specific origin
-//     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Specify allowed methods
-//     credentials: true, // Allow credentials (cookies, etc.)
-//     allowedHeaders: ['Content-Type', 'Authorization'], // Specify allowed headers
-//     preflightContinue: false, // Let the server handle preflight requests
-//     optionsSuccessStatus: 204 // Respond with 204 for successful OPTIONS requests
-// };
+// Parse cookies
+app.use(cookieParser());
 
-// Define your allowed origins
-const allowedOrigins = ['https://tramt-frontend.vercel.app'];
-
-// Configure CORS options
-const corsOptions = {
-    origin: function (origin, callback) {
-        // Allow requests from allowed origins or no origin (same-origin requests)
-        if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
-            callback(null, true); // Allow the request
-        } else {
-            callback(new Error('Not allowed by CORS')); // Block the request
-        }
-    },
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Specify allowed methods
-    credentials: true, // Allow credentials (cookies, etc.)
-    allowedHeaders: ['Content-Type', 'Authorization'], // Specify allowed headers
-    preflightContinue: false, // Let the server handle preflight requests
-    optionsSuccessStatus: 204 // Respond with 204 for successful OPTIONS requests
-};
-
-
-app.use(cors(corsOptions)); // Apply CORS middleware
-app.use(cookieParser()); // Parse cookies
+// Logging Middleware to capture request details
+// app.use((req, res, next) => {
+//     console.log(`Request Origin: ${req.headers.origin}`);
+//     console.log(`Request Method: ${req.method}`);
+//     console.log(`Request Headers: ${JSON.stringify(req.headers)}`);
+//     next();
+// });
 
 // Routes
-app.use('/auth', UserRouter); // Use UserRouter for /auth paths
 
 // Test route
 app.get('/', (req, res) => {
     res.send('Hello Vipin Don');
 });
 
-// Admin routes
-app.use("/api/admin", adminRoutes); // Use adminRoutes for /api/admin paths
+// Use UserRouter for /auth paths
+app.use('/auth', UserRouter);
+
+// Use adminRoutes for /api/admin paths
+app.use("/api/admin", adminRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
@@ -71,7 +59,7 @@ app.use((err, req, res, next) => {
 const startServer = async () => {
     try {
         await connectDB(); // Connect to the database
-        const PORT = process.env.PORT || 8081;
+        const PORT = process.env.PORT || 3001;
         app.listen(PORT, () => {
             console.log(`Server is running on port ${PORT}`);
         });

@@ -1,7 +1,7 @@
 import express from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { Admin } from '../models/AdminSchema.js';
+import { Admin } from './AdminSchema.js';
 import nodemailer from 'nodemailer';
 
 const router = express.Router();
